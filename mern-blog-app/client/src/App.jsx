@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-const API_URL = "https://stunning-fishstick-9wp54jg5x5gc7jjr-5000.app.github.dev/api/posts";
+const API_URL = "https://cautious-orbit-g6grw7vrjw5cp96v-5000.app.github.dev/api/posts";
 
 function App() {
   const [posts, setPosts] = useState([]);
