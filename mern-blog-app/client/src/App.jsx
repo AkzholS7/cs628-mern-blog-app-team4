@@ -9,6 +9,8 @@ const CHAT_API_URL =
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [editingPostId, setEditingPostId] = useState(null);
+
   const [form, setForm] = useState({
     title: "",
     content: "",
@@ -29,19 +31,47 @@ function App() {
     setPosts(data);
   };
 
-  const createPost = async (e) => {
+  const createOrUpdatePost = async (e) => {
     e.preventDefault();
 
-    await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
+    if (editingPostId) {
+      await fetch(`${API_URL}/${editingPostId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+
+      setEditingPostId(null);
+    } else {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+    }
 
     setForm({ title: "", content: "", author: "" });
     fetchPosts();
+  };
+
+  const startEdit = (post) => {
+    setEditingPostId(post._id);
+    setForm({
+      title: post.title,
+      content: post.content,
+      author: post.author
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cancelEdit = () => {
+    setEditingPostId(null);
+    setForm({ title: "", content: "", author: "" });
   };
 
   const deletePost = async (id) => {
@@ -113,14 +143,15 @@ function App() {
       <header>
         <h1>MERN Blog Application</h1>
         <p>
-          Create, manage, and enhance blog content through a modern MERN-stack platform with integrated AI assistance.
+          Create, manage, and enhance blog content through a modern MERN-stack
+          platform with integrated AI assistance.
         </p>
       </header>
 
-
       <section className="form-section">
-        <h2>Create Blog Post</h2>
-        <form onSubmit={createPost}>
+        <h2>{editingPostId ? "Update Blog Post" : "Create Blog Post"}</h2>
+
+        <form onSubmit={createOrUpdatePost}>
           <input
             type="text"
             placeholder="Blog title"
@@ -144,7 +175,19 @@ function App() {
             required
           />
 
-          <button type="submit">Publish Post</button>
+          <button type="submit">
+            {editingPostId ? "Update Post" : "Publish Post"}
+          </button>
+
+          {editingPostId && (
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={cancelEdit}
+            >
+              Cancel Edit
+            </button>
+          )}
         </form>
       </section>
 
@@ -162,12 +205,21 @@ function App() {
               <div className="post-footer">
                 <small>By {post.author}</small>
 
-                <button
-                  className="delete-button"
-                  onClick={() => deletePost(post._id)}
-                >
-                  Delete Post
-                </button>
+                <div className="post-actions">
+                  <button
+                    className="edit-button"
+                    onClick={() => startEdit(post)}
+                  >
+                    Edit Post
+                  </button>
+
+                  <button
+                    className="delete-button"
+                    onClick={() => deletePost(post._id)}
+                  >
+                    Delete Post
+                  </button>
+                </div>
               </div>
             </div>
           ))

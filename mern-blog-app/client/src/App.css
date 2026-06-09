@@ -22,30 +22,12 @@ header {
 
 .form-section,
 .posts-section,
-.use-cases-section,
 .chatbot-section {
   background: white;
   padding: 25px;
   border-radius: 12px;
   margin-bottom: 25px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-.use-cases-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
-}
-
-.use-case-card {
-  background: #f8fafc;
-  border-left: 5px solid #16a34a;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.use-case-card h3 {
-  margin-top: 0;
 }
 
 form {
@@ -72,7 +54,7 @@ button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
 }
 
@@ -101,16 +83,46 @@ button:hover {
 }
 
 .post-footer small {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
+.post-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Smaller Edit Button */
+.edit-button {
+  background: #16a34a;
+  width: 100px;
+  padding: 9px;
+  font-size: 14px;
+}
+
+.edit-button:hover {
+  background: #15803d;
+}
+
+/* Smaller Delete Button */
 .delete-button {
   background: #dc2626;
-  width: 160px;
+  width: 100px;
+  padding: 9px;
+  font-size: 14px;
 }
 
 .delete-button:hover {
   background: #b91c1c;
+}
+
+/* Cancel Edit Button */
+.cancel-button {
+  background: #64748b;
+}
+
+.cancel-button:hover {
+  background: #475569;
 }
 
 .chatbot-description {
@@ -155,14 +167,13 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-  .chat-form {
+  .chat-form,
+  .post-actions {
     flex-direction: column;
   }
 
-  .chat-form button {
-    width: 100%;
-  }
-
+  .chat-form button,
+  .edit-button,
   .delete-button {
     width: 100%;
   }
