@@ -20,18 +20,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
-
-router.get("/add-test", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const newPost = await Post.create({
-      title: "My First Blog",
-      content: "This is the first MERN blog post.",
-      author: "Akzhol"
-    });
+    const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
-    res.json(newPost);
+    if (!deletedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
+module.exports = router;
